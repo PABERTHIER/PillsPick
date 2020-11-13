@@ -1,0 +1,20 @@
+{
+    "app": {
+        "name": "PillsPick"
+    },
+    "pages": {
+        "default": {
+            "title": "PillsPick",
+            "links": {}
+        },
+        "index": {}
+    },
+    "components": {},
+    "miscellaneous": {
+        "error": "Erreur",
+        "success": "Succès",
+        "info": "Info",
+        "cancel": "Retour",
+        "ok": "Valider"
+    }
+}

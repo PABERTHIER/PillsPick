@@ -1,0 +1,19 @@
+$primary-color: black;
+
+$background-color: #f7f5f5;
+$background-color-second: #eaeded;
+$background-color-third: #fcfafa;
+
+$white: white;
+$red: red;
+$green: green;
+$grey: grey;
+$black: black;
+
+
+@mixin shadow-default {
+  box-shadow: 0px 10px 20px rgba(200, 200, 200, 0.4);
+}
+
+$transition-duration-primary: 200ms;
+$transition-duration-secondary: 500ms;

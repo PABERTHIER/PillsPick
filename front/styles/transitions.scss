@@ -1,0 +1,15 @@
+.notification-item {
+  display: inline-block;
+  margin-right: 10px;
+}
+.notification-move{
+  transition: 0.5s;
+}
+.notification-enter-active, .notification-leave-active {
+  transition: all 0.5s;
+}
+.notification-enter, .notification-leave-to {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
