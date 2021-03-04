@@ -14,7 +14,7 @@ module.exports = {
     'prettier/vue',
     'plugin:prettier/recommended',
     'plugin:nuxt/recommended',
-    'plugin:vue-i18n/recommended',
+    'plugin:@intlify/vue-i18n/recommended',
   ],
   // add your custom rules here
   rules: {
@@ -42,11 +42,18 @@ module.exports = {
     '@typescript-eslint/semi': ['error', 'never'],
     'import/no-webpack-loader-syntax': 0,
     'vue/no-v-html': 0,
-    'vue-i18n/no-v-html': 0,
+    '@intlify/vue-i18n/no-v-html': 0,
+    '@intlify/vue-i18n/no-raw-text': [
+      'warn',
+      {
+        ignorePattern: '^[-#:()&%]+$',
+      },
+    ],
   },
   settings: {
     'vue-i18n': {
       localeDir: './locales/*.json', // extention is glob formatting!
+      messageSyntaxVersion: '^9.0.0',
     },
   },
 }

@@ -21,14 +21,14 @@ export default Vue.extend<D, M, C, P>({
   data() {
     return {}
   },
-  computed: {},
-  mounted() {},
-  methods: {},
   head() {
     return {
       title: this.$t('pages.default.title') as string,
     }
   },
+  computed: {},
+  mounted() {},
+  methods: {},
 })
 </script>
 
