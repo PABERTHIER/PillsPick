@@ -10,12 +10,12 @@ const config: Configuration = {
     title: 'PillsPick',
     meta: [
       { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       {
-        hid: 'description',
-        name: 'description',
-        content: '',
+        name: 'viewport',
+        content:
+          'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no',
       },
+      { hid: 'description', name: 'description', content: '' },
     ],
   },
   /*
@@ -69,7 +69,6 @@ const config: Configuration = {
    ** See https://nuxtjs.org/api/configuration-build/
    */
   build: {
-    plugins: [new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)],
     publicPath: '/_nuxt/',
     /*
      ** You can extend webpack config here
@@ -89,6 +88,9 @@ const config: Configuration = {
   styleResources: {
     scss: ['./styles/variables.scss'],
   },
+  // server: {
+  //   host: '0.0.0.0',
+  // },
 }
 
 export default config
