@@ -24,9 +24,9 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { D, M, C, P } from '~/components/Notification.types.ts'
+import { D, M, C, P } from '~/components/Notification.types'
 
-export default Vue.extend({
+export default Vue.extend<D, M, C, P>({
   props: {
     title: {
       type: String,
@@ -37,7 +37,7 @@ export default Vue.extend({
       required: true,
     },
     type: {
-      type: String,
+      type: Object,
       required: true,
     },
   },

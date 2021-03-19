@@ -8,7 +8,6 @@ export interface M {
 
 export interface C {
   notifications?: INotification[]
-  header: string
 }
 
 export interface P {}

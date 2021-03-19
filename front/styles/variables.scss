@@ -1,4 +1,5 @@
 $primary-color: black;
+$primary-color-light: #ccc2db;
 
 $background-color: #f7f5f5;
 $background-color-second: #eaeded;
@@ -9,7 +10,13 @@ $red: red;
 $green: green;
 $grey: grey;
 $black: black;
+$orange: #ffcc00;
 
+$header-height: 80px;
+
+$navbar-background-color: #4a4a4a;
+
+$toolbar-background-color: #4574ba;
 
 @mixin shadow-default {
   box-shadow: 0px 10px 20px rgba(200, 200, 200, 0.4);
@@ -17,3 +24,12 @@ $black: black;
 
 $transition-duration-primary: 200ms;
 $transition-duration-secondary: 500ms;
+
+$window-breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1400px
+) !default;

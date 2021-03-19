@@ -10,6 +10,19 @@
         "index": {}
     },
     "components": {},
+    "icons": {
+        "advices": "Prescriptions",
+        "cosmetic-products": "Beauté cosmétique",
+        "dressings": "Pansements",
+        "health": "Santé",
+        "health-products": "Santé",
+        "medicinal-herb": "Soins naturels",
+        "motherhood": "Maternité",
+        "nutrition": "Diététique",
+        "optical": "Optique",
+        "orthopedic": "Orthopédie",
+        "pills": "Médicaments"
+    },
     "miscellaneous": {
         "error": "Erreur",
         "success": "Succès",

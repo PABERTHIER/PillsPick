@@ -1,7 +1,4 @@
-import { Configuration } from '@nuxt/types'
-import webpack from 'webpack'
-
-const config: Configuration = {
+const config = {
   mode: 'spa',
   /*
    ** Headers of the page
@@ -31,6 +28,7 @@ const config: Configuration = {
     '~/plugins/notifications',
     '~/plugins/svg',
     '~/plugins/vuejs-dialog',
+    '~/plugins/vue-mq',
   ],
   /*
    ** Nuxt.js dev-modules
@@ -85,8 +83,11 @@ const config: Configuration = {
       // Stylelint
     },
   },
+  pwa: {
+    workbox: false,
+  },
   styleResources: {
-    scss: ['./styles/variables.scss'],
+    scss: ['./styles/variables.scss', './styles/responsive.scss'],
   },
   // server: {
   //   host: '0.0.0.0',

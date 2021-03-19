@@ -1,0 +1,50 @@
+@mixin window-up($name, $breakpoints: $window-breakpoints) {
+  $min: min($name, $breakpoints);
+  @if $min {
+    @media (min-width: $min) {
+      @content;
+    }
+  } @else {
+    @content;
+  }
+}
+
+@mixin window-down($name, $breakpoints: $window-breakpoints) {
+  $max: max($name, $breakpoints);
+  @if $max {
+    @media (max-width: $max) {
+      @content;
+    }
+  } @else {
+    @content;
+  }
+}
+
+@mixin window-between($lower, $upper, $breakpoints: $window-breakpoints) {
+  $min: min($lower, $breakpoints);
+  $max: max($upper, $breakpoints);
+
+  @if $min != null and $max != null {
+    @media (min-width: $min) and (max-width: $max) {
+      @content;
+    }
+  } @else if $max == null {
+    @include window-up($lower, $breakpoints) {
+      @content;
+    }
+  } @else if $min == null {
+    @include window-down($upper, $breakpoints) {
+      @content;
+    }
+  }
+}
+
+@function min($name, $breakpoints: $window-breakpoints) {
+  $min: map-get($breakpoints, $name);
+  @return if($min != 0, $min, null);
+}
+
+@function max($name, $breakpoints: $window-breakpoints) {
+  $max: map-get($breakpoints, $name);
+  @return if($max and $max > 0, $max - .02, null);
+}

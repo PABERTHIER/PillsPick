@@ -28,7 +28,6 @@
     "vue-star-rating": "^1.6.1",
     "vue2-datepicker": "3.6.3",
     "vue2-google-maps": "^0.10.7",
-    "vuedraggable": "^2.23.2",
     "vuejs-dialog": "^1.4.1"
   },
   "devDependencies": {

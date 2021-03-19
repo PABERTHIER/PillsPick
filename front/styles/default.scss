@@ -5,10 +5,18 @@ body {
   font-size: 14px;
 }
 
-.child-page {
-  padding: 40px 15px 15px 15px;
-  background-color: $background-color-third;
-  h1 {
-    padding-bottom: 20px;
-  }
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+*{
+  scrollbar-color: $primary-color-light $white;
+}
+
+*::-webkit-scrollbar{ 
+  background-color: $white;
+}
+*::-webkit-scrollbar-thumb{
+  background-color: $primary-color-light;
 }

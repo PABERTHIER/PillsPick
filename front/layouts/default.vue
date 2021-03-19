@@ -1,9 +1,12 @@
 <template>
   <div id="layoutContainer">
     <header>
-      <h1>{{ header }}</h1>
+      <Toolbar />
     </header>
     <div id="bodyContainer">
+      <div id="menuContainer">
+        <NavBar />
+      </div>
       <div id="mainContainer">
         <div id="mainContainerScrollable">
           <transition name="page">
@@ -32,18 +35,19 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState, mapMutations } from 'vuex'
+import NavBar from '~/components/NavBar.vue'
 import Notification from '~/components/Notification.vue'
+import Toolbar from '~/components/Toolbar.vue'
 import { D, M, C, P } from '~/types/layouts/default.types'
 
 export default Vue.extend<D, M, C, P>({
   components: {
+    NavBar,
     Notification,
+    Toolbar,
   },
   computed: {
     ...mapState('notifications', ['notifications']),
-    header() {
-      return this.$t('pages.default.title') as string
-    },
   },
   methods: {
     ...mapMutations('notifications', ['deleteNotification']),
@@ -63,78 +67,164 @@ html {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   box-sizing: border-box;
-  height: 100vh;
-  width: 100vw;
-}
-header {
-  text-align: center;
-  font-size: 25px;
-  padding-top: 50px;
-  padding-bottom: 50px;
-  background-color: $background-color-second;
+  height: 100%;
+  width: 100%;
 }
 body {
-  height: 100vh;
-  width: 100vw;
+  height: 100%;
+  width: 100%;
   overflow: hidden;
+  margin: 0px;
   #__nuxt,
   #__layout {
-    height: 100vh;
-    width: 100vw;
+    height: 100%;
+    width: 100%;
   }
 }
 #layoutContainer {
-  display: flex;
-  flex-direction: column;
   height: 100%;
-}
-#bodyContainer {
-  flex: 1;
-  display: flex;
-  overflow: hidden;
-  background-color: $background-color-second;
-}
-#mainContainer {
-  flex: 1;
-  height: 100%;
-  overflow-y: auto;
-  background-color: $background-color-second;
-}
-#mainContainerScrollable {
-  position: relative;
-  height: 100%;
-}
-#notifsContainer {
-  position: fixed;
-  bottom: 35px;
-  right: 35px;
-  z-index: 10;
-  .notifs-container {
-    margin-top: 10px;
+  header {
+    position: absolute;
+    background-color: $toolbar-background-color;
+    height: $header-height;
+    z-index: 200;
+    top: 0;
+    left: 0;
+    width: 100%;
+    color: $white;
+  }
+  #bodyContainer {
+    #mainContainer {
+      height: 100%;
+      overflow-y: auto;
+      background-color: $background-color;
+      #mainContainerScrollable {
+        position: relative;
+        // height: 100%;
+      }
+    }
+  }
+  .page-enter-active,
+  .page-leave-active {
+    transition: opacity 0.2s;
+  }
+  .page-enter,
+  .page-leave-to {
+    opacity: 0;
+  }
+  a:-webkit-any-link {
+    text-decoration: none;
   }
 }
-.page-container {
-  height: 100%;
-  padding: 15px 15px;
-  h1 {
-    margin: 0 0 15px 0;
+@include window-up(lg) {
+  #layoutContainer {
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: 50px;
+    grid-template-areas: 'header';
+    #bodyContainer {
+      display: grid;
+      grid-template-columns: 160px auto;
+      grid-template-rows: 80px auto;
+      grid-template-areas: 'menuContainer mainContainer';
+      overflow-y: auto;
+      background-color: rgba(112, 112, 112, 0.1);
+      position: absolute;
+      top: $header-height;
+      width: 100%;
+      height: calc(100% - 80px);
+      #mainContainer {
+        position: absolute;
+        left: 160px;
+        width: calc(100% - 160px);
+      }
+      #menuContainer {
+        background-color: $navbar-background-color;
+        height: 100%;
+        color: $black;
+        box-sizing: border-box;
+        position: absolute;
+        left: 0;
+        width: 160px;
+      }
+    }
+    #notifsContainer {
+      position: fixed;
+      bottom: 75px;
+      right: 35px;
+      z-index: 1000;
+      .notifs-container {
+        margin-top: 10px;
+      }
+    }
   }
 }
-*,
-*:before,
-*:after {
-  box-sizing: border-box;
-  margin: 0;
+@include window-down(lg) {
+  #layoutContainer {
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: 80px auto 61px;
+    grid-template-areas: 'header';
+    #bodyContainer {
+      display: grid;
+      grid-template-columns: auto;
+      grid-template-rows: auto 61px;
+      grid-template-areas:
+        'mainContainer'
+        'menuContainer';
+      position: absolute;
+      top: $header-height;
+      height: calc(100% - #{$header-height});
+      width: 100%;
+      #mainContainer {
+        height: 100%;
+        width: 100%;
+        overflow-y: auto;
+      }
+      #menuContainer {
+        grid-row-start: 2;
+        background-color: $navbar-background-color;
+        position: absolute;
+        width: 100%;
+        z-index: 200;
+        bottom: 0;
+        height: 61px;
+      }
+    }
+    #notifsContainer {
+      position: fixed;
+      bottom: 85px;
+      right: 0;
+      z-index: 1000;
+      .notifs-container {
+        margin-top: 10px;
+      }
+    }
+  }
+  .page-container {
+    height: 100%;
+    padding: 15px 5px;
+    overflow-y: auto;
+    h1 {
+      margin: 0 0 15px 10px;
+    }
+  }
 }
-.page-enter-active,
-.page-leave-active {
-  transition: opacity 0.2s;
+@include window-up(md) {
+  .page-container {
+    height: 100%;
+    padding: 15px 15px;
+    overflow-y: auto;
+    h1 {
+      margin: 0 0 15px 10px;
+    }
+  }
 }
-.page-enter,
-.page-leave-to {
-  opacity: 0;
-}
-a:-webkit-any-link {
-  text-decoration: none;
+@include window-down(md) {
+  #layoutContainer {
+    #notifsContainer {
+      width: 100%;
+    }
+  }
 }
 </style>
