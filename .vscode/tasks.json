@@ -7,7 +7,7 @@
 			"problemMatcher": "$func-python-watch",
 			"isBackground": true,
 			"options": {
-				"cwd": "${workspaceFolder}/back\\api"
+				"cwd": "${workspaceFolder}/api"
 			}
 		}
 	]
