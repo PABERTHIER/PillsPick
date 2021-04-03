@@ -112,7 +112,6 @@ export default Vue.extend<D, M, C, P>({
   .navbar {
     display: flex;
     justify-content: space-around;
-    height: 100%;
     a {
       width: 100%;
       text-align: center;

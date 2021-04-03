@@ -49,7 +49,13 @@ const config = {
    ** See https://axios.nuxtjs.org/options
    */
   axios: {
-    baseURL: 'http://localhost/PillsPick/restapi/',
+    baseURL: process.env.BASE_API_URL || 'http://localhost/PillsPick/',
+  },
+  env: {
+    base: process.env.BASE_ROUTE || '/',
+    baseApi: process.env.BASE_API_URL || 'http://localhost/PillsPick/',
+    basePublic: process.env.BASE_PUBLIC_ROUTE || 'http://localhost/PillsPick/',
+    publicStaticPath: process.env.BASE_URL || '/',
   },
   router: {
     base: '/',

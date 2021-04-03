@@ -180,6 +180,7 @@ body {
         height: 100%;
         width: 100%;
         overflow-y: auto;
+        grid-row-start: 1;
       }
       #menuContainer {
         grid-row-start: 2;
