@@ -6,7 +6,7 @@
   "debug.internalConsoleOptions": "neverOpen",
   "liveServer.settings.proxy": {
     "enable": true,
-    "baseUri": "api",
-    "proxyUri": "http://PillsPick"
+    "baseUri": "/api",
+    "proxyUri": "http://127.0.0.1:7071/api",
   }
 }

@@ -42,23 +42,30 @@ const config = {
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
     '@nuxtjs/eslint-module',
+    '@nuxtjs/proxy',
     '@nuxtjs/style-resources',
   ],
+  axios: {
+    proxy: true,
+    debug: true,
+    proxyHeaders: false,
+    credentials: false,
+  },
+  proxy: {
+    '^/api': {
+      target: 'http://localhost:7071',
+      changeOrigin: true,
+    },
+  },
   /*
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
    */
-  axios: {
-    baseURL: process.env.BASE_API_URL || 'http://localhost/PillsPick/',
-  },
   env: {
-    base: process.env.BASE_ROUTE || '/',
-    baseApi: process.env.BASE_API_URL || 'http://localhost/PillsPick/',
-    basePublic: process.env.BASE_PUBLIC_ROUTE || 'http://localhost/PillsPick/',
-    publicStaticPath: process.env.BASE_URL || '/',
+    baseApi: process.env.BASE_API_URL || 'http://localhost:7071/api/',
   },
   router: {
-    base: '/',
+    base: '/PillsPick',
     middleware: [],
     scrollBehavior: (to, from, savedPosition) => {
       if (savedPosition) {
@@ -98,6 +105,7 @@ const config = {
   // server: {
   //   host: '0.0.0.0',
   // },
+  // mobile tests
 }
 
 export default config

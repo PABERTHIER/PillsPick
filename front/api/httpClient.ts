@@ -4,19 +4,19 @@ import { RestOperationResult } from './api.type'
 
 export default ($axios: NuxtAxiosInstance) => ({
   delete<T>(uri: string, cancelToken?: CancelToken) {
-    return $axios.$delete<T>(uri, { withCredentials: true, cancelToken })
+    return $axios.$delete<T>(uri, { cancelToken })
   },
   get<T>(uri: string, cancelToken?: CancelToken) {
-    return $axios.$get<T>(uri, { withCredentials: true, cancelToken })
+    return $axios.$get<T>(uri, { cancelToken })
   },
   patch<T>(uri: string, data: any[], cancelToken?: CancelToken) {
-    return $axios.$patch<T>(uri, data, { withCredentials: true, cancelToken })
+    return $axios.$patch<T>(uri, data, { cancelToken })
   },
   post<T>(uri: string, data: any, cancelToken?: CancelToken) {
-    return $axios.$post<T>(uri, data, { withCredentials: true, cancelToken })
+    return $axios.$post<T>(uri, data, { cancelToken })
   },
   put<T>(uri: string, data: any, cancelToken?: CancelToken) {
-    return $axios.$put<T>(uri, data, { withCredentials: true, cancelToken })
+    return $axios.$put<T>(uri, data, { cancelToken })
   },
 })
 

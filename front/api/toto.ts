@@ -4,8 +4,7 @@ import httpClient from '~/api/httpClient'
 
 export default ($axios: NuxtAxiosInstance) => ({
   getMessage(cancelToken?: CancelToken) {
-    console.log('toto')
-    const url = '/hello'
+    const url = process.env.baseApi + 'hello'
     return httpClient($axios).get<any>(url, cancelToken)
   },
 })
