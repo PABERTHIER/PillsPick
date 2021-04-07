@@ -50,6 +50,7 @@ const config = {
     debug: true,
     proxyHeaders: false,
     credentials: false,
+    baseURL: process.env.BASE_API_URL || 'http://localhost:7071/api/',
   },
   proxy: {
     '^/api': {
@@ -62,10 +63,13 @@ const config = {
    ** See https://axios.nuxtjs.org/options
    */
   env: {
+    base: process.env.BASE_ROUTE || '/',
     baseApi: process.env.BASE_API_URL || 'http://localhost:7071/api/',
+    basePublic: process.env.BASE_PUBLIC_ROUTE || 'http://localhost/',
+    publicStaticPath: process.env.BASE_URL || '/',
   },
   router: {
-    base: '/PillsPick',
+    base: process.env.BASE_ROUTE || '/',
     middleware: [],
     scrollBehavior: (to, from, savedPosition) => {
       if (savedPosition) {
@@ -80,7 +84,7 @@ const config = {
    ** See https://nuxtjs.org/api/configuration-build/
    */
   build: {
-    publicPath: '/_nuxt/',
+    publicPath: process.env.BASE_URL || '/_nuxt/',
     /*
      ** You can extend webpack config here
      */
