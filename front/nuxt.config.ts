@@ -50,11 +50,13 @@ const config = {
     debug: true,
     proxyHeaders: false,
     credentials: false,
-    baseURL: process.env.BASE_API_URL || 'http://localhost:7071/api/',
+    baseURL:
+      process.env.BASE_API_URL ||
+      'https://salmon-hill-05587c903.azurestaticapps.net/api/',
   },
   proxy: {
     '^/api': {
-      target: 'http://localhost:7071',
+      target: 'https://salmon-hill-05587c903.azurestaticapps.net',
       changeOrigin: true,
     },
   },
