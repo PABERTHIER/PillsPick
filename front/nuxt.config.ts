@@ -64,7 +64,9 @@ const config = {
    */
   env: {
     base: process.env.BASE_ROUTE || '/',
-    baseApi: process.env.BASE_API_URL || 'http://localhost:7071/api/',
+    baseApi:
+      process.env.BASE_API_URL ||
+      'https://salmon-hill-05587c903.azurestaticapps.net/api/',
     basePublic: process.env.BASE_PUBLIC_ROUTE || 'http://localhost/',
     publicStaticPath: process.env.BASE_URL || '/',
   },
