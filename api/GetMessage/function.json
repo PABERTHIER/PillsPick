@@ -9,7 +9,7 @@
       "methods": [
         "get"
       ],
-      "route": "hello"
+      "route": "getdrugs"
     },
     {
       "type": "http",

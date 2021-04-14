@@ -1,22 +1,25 @@
 import logging
+import pyodbc
+import json as simplejson
 import azure.functions as func
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
-    logging.info('Python HTTP trigger function processed a request.')
-
-    name = req.params.get('name')
-    if not name:
-        try:
-            req_body = req.get_json()
-        except ValueError:
-            pass
-        else:
-            name = req_body.get('name')
-
-    if name:
-        return func.HttpResponse(f"Hello, {name}. This HTTP triggered function executed successfully.")
+   
+    try:
+        server = 'tcp:pillspick-server.database.windows.net' 
+        database = 'PillsPick-Db' 
+        username = 'PillsPick2021@pillspick-server' 
+        password = 'Pills2021Pick' 
+        cnxn = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER='+server+';DATABASE='+database+';UID='+username+';PWD='+ password)
+        print("Connection established")
+    except pyodbc.DatabaseError as err:
+        raise err
     else:
-        return func.HttpResponse(
-             "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response.",
-             status_code=200
-        )
+        cursor = cnxn.cursor()
+        cursor.execute("SELECT * FROM Drug")
+        rows = cursor.fetchall()
+        data = []
+        for row in rows:
+            data.append([x for x in row])
+
+    return func.HttpResponse(simplejson.dumps(data))
