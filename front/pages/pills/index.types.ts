@@ -1,6 +1,12 @@
-export interface D {}
+import { IDrugs } from '~/api/api.type'
 
-export interface M {}
+export interface D {
+  drugs: IDrugs[]
+}
+
+export interface M {
+  loadDrugs: () => void
+}
 
 export interface C {}
 

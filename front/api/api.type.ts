@@ -10,7 +10,10 @@ export interface IDrugs {
   id: number
   name: string
   type: string
-  quantity: number
   instructions: string
   pictureId: number
+  cisCode: number
+  routeAdministration: string
+  owner: string
+  isWatched: boolean
 }

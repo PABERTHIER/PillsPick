@@ -1,4 +1,5 @@
 /* eslint-disable */
+require('./add')
 require('./advice')
 require('./baby')
 require('./body')

@@ -14,9 +14,12 @@ export default ($axios: NuxtAxiosInstance) => ({
             id: x[0],
             name: x[1],
             type: x[2],
-            quantity: x[3],
-            instructions: x[4],
-            pictureId: x[5],
+            instructions: x[3],
+            pictureId: x[4],
+            cisCode: x[5],
+            routeAdministration: x[6],
+            owner: x[7],
+            isWatched: x[8],
           }
         })
         return result as IDrugs[]

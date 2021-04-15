@@ -3,3 +3,21 @@
 # Manually managing azure-functions-worker may cause unexpected issues
 
 azure-functions
+astroid==2.5.3
+colorama==0.4.4
+cybox==2.1.0.21
+ioc-writer==0.3.3
+isort==5.8.0
+lazy-object-proxy==1.6.0
+lxml==4.6.2
+mccabe==0.6.1
+mixbox==1.0.5
+ordered-set==4.0.2
+pylint==2.7.4
+pyodbc==4.0.30
+python-dateutil==2.8.1
+six==1.15.0
+tk==0.1.0
+toml==0.10.2
+weakrefmethod==1.0.3
+wrapt==1.12.1
