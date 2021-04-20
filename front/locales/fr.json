@@ -28,6 +28,14 @@
         "success": "Succès",
         "info": "Info",
         "cancel": "Retour",
-        "ok": "Valider"
+        "ok": "Valider",
+        "previous": "Précédent",
+        "next": "Suivant",
+        "no_element": "Il n'y a aucun élément.",
+        "look_for_drug": "Chercher un médicament",
+        "look_for_drug_store": "Chercher une pharmacie (code postal)",
+        "orders": "Commandes",
+        "login": "Connection",
+        "logout": "Déconnection"
     }
 }

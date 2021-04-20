@@ -1,7 +1,14 @@
 export interface D {}
 
-export interface M {}
+export interface M {
+  deleteDrugStoreName: () => void
+  connect: () => void
+  disconnect: () => void
+}
 
 export interface C {}
 
-export interface P {}
+export interface P {
+  drugStoreName?: string
+  isConnected: boolean
+}

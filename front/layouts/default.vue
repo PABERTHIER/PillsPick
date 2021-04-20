@@ -1,7 +1,13 @@
 <template>
   <div id="layoutContainer">
     <header>
-      <Toolbar />
+      <Toolbar
+        :drug-store-name="drugStoreName"
+        :is-connected="isConnected"
+        @deleteDrugStoreName="removeDrugStore"
+        @connect="connect"
+        @disconnect="dispatchLogout"
+      />
     </header>
     <div id="bodyContainer">
       <div id="menuContainer">
@@ -34,7 +40,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 import NavBar from '~/components/NavBar.vue'
 import Notification from '~/components/Notification.vue'
 import Toolbar from '~/components/Toolbar.vue'
@@ -48,9 +54,23 @@ export default Vue.extend<D, M, C, P>({
   },
   computed: {
     ...mapState('notifications', ['notifications']),
+    ...mapState('drugStores', ['drugStore']),
+    ...mapState('user', ['isConnected']),
+    drugStoreName() {
+      if (this.drugStore) {
+        return this.drugStore.name
+      }
+      return undefined
+    },
   },
   methods: {
     ...mapMutations('notifications', ['deleteNotification']),
+    ...mapActions('drugStores', ['removeDrugStore']),
+    ...mapActions('user', ['dispatchLogin', 'dispatchLogout']),
+    connect() {
+      const login = prompt('Entrer votre login:')
+      this.dispatchLogin(login!)
+    },
   },
 })
 </script>

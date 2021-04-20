@@ -12,12 +12,13 @@ $grey: grey;
 $grey-blue: #8395bc;
 $black: black;
 $orange: #ffcc00;
+$blue: #4574ba;
 
 $header-height: 80px;
 
 $navbar-background-color: #4a4a4a;
 
-$toolbar-background-color: #4574ba;
+$toolbar-background-color: $blue;
 
 @mixin shadow-default {
   box-shadow: 0px 10px 20px rgba(200, 200, 200, 0.4);

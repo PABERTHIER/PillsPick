@@ -68,15 +68,18 @@ export default Vue.extend<D, M, C, P>({
   }
   .icon-info {
   }
-
   .infos {
     margin-left: 15px;
+    overflow-y: hidden;
+    max-height: 82px;
     .name {
       overflow-x: hidden;
     }
     .type {
+      overflow-x: hidden;
     }
     .route-administration {
+      overflow-x: hidden;
     }
   }
 }

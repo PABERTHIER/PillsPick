@@ -9,7 +9,7 @@
       "methods": [
         "get"
       ],
-      "route": "getdrugs"
+      "route": "postLogin/{mail}"
     },
     {
       "type": "http",
