@@ -35,7 +35,7 @@
         "look_for_drug": "Chercher un médicament",
         "look_for_drug_store": "Chercher une pharmacie (code postal)",
         "orders": "Commandes",
-        "login": "Connection",
-        "logout": "Déconnection"
+        "login": "Connexion",
+        "logout": "Déconnexion"
     }
 }
