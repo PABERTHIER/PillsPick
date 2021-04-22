@@ -4,6 +4,7 @@ export interface D {
   maternity: IDrugs[]
   maternityFromSearch: IDrugs[]
   isLoaded: boolean
+  isLoading: boolean
   page: number
   perPage: number
   pages: any[]

@@ -14,6 +14,8 @@
         <div class="icons-container">
           <Avatar
             :is-connected="isConnected"
+            :user-id="userId"
+            :user="user"
             @connect="connect"
             @disconnect="disconnect"
           />
@@ -43,6 +45,15 @@ export default Vue.extend<D, M, C, P>({
     isConnected: {
       type: Boolean,
       required: true,
+    },
+    userId: {
+      type: Number,
+      required: true,
+    },
+    user: {
+      type: Object,
+      required: false,
+      default: undefined,
     },
   },
   data() {

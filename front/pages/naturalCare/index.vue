@@ -1,12 +1,13 @@
 <template>
   <div class="page-container">
+    <Loading :active.sync="isLoading" :is-full-page="true" />
     <SearchBar :desc="searchDesc" @search="search" />
     <div
       v-if="naturalCare && naturalCare.length"
       class="natural-care-container"
     >
       <div v-for="nc in displayedNaturalCare" :key="nc.id" class="natural-care">
-        <PillContainer :drug="nc" class="nc" />
+        <PillContainer :drug="nc" :picture-name="'medicinal-herb'" class="nc" />
       </div>
     </div>
     <div v-if="isLoaded && naturalCareData.length" class="pagination">
@@ -45,13 +46,16 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import Loading from 'vue-loading-overlay'
 import drugsClient from '~/api/drugsClient'
 import SearchBar from '~/components/SearchBar.vue'
 import PillContainer from '~/components/PillContainer.vue'
+import 'vue-loading-overlay/dist/vue-loading.css'
 import { D, M, C, P } from '~/pages/naturalCare/index.types'
 
 export default Vue.extend<D, M, C, P>({
   components: {
+    Loading,
     PillContainer,
     SearchBar,
   },
@@ -61,6 +65,7 @@ export default Vue.extend<D, M, C, P>({
       naturalCare: [],
       naturalCareFromSearch: [],
       isLoaded: false,
+      isLoading: false,
       page: 1,
       perPage: 40,
       pages: [],
@@ -92,6 +97,7 @@ export default Vue.extend<D, M, C, P>({
   },
   methods: {
     async loadNaturalCare() {
+      this.isLoading = true
       try {
         const result = await drugsClient(this.$axios).getDrugs()
         this.naturalCare = result.filter((x) => x.headerName === 'natural_care')
@@ -99,6 +105,8 @@ export default Vue.extend<D, M, C, P>({
       } catch (e) {
         this.$notify('', e, 'error', 5000)
         this.isLoaded = false
+      } finally {
+        this.isLoading = false
       }
     },
     async search(searchingValue) {

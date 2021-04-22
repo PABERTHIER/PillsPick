@@ -4,6 +4,8 @@
       <Toolbar
         :drug-store-name="drugStoreName"
         :is-connected="isConnected"
+        :user-id="user ? user.id : 0"
+        :user="user ? user : undefined"
         @deleteDrugStoreName="removeDrugStore"
         @connect="connect"
         @disconnect="dispatchLogout"
@@ -55,7 +57,7 @@ export default Vue.extend<D, M, C, P>({
   computed: {
     ...mapState('notifications', ['notifications']),
     ...mapState('drugStores', ['drugStore']),
-    ...mapState('user', ['isConnected']),
+    ...mapState('user', ['isConnected', 'user']),
     drugStoreName() {
       if (this.drugStore) {
         return this.drugStore.name
@@ -214,7 +216,7 @@ body {
     }
     #notifsContainer {
       position: fixed;
-      bottom: 85px;
+      bottom: 61px;
       right: 0;
       z-index: 1000;
       .notifs-container {

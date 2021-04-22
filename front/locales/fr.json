@@ -9,7 +9,11 @@
         },
         "index": {}
     },
-    "components": {},
+    "components": {
+        "hey-you": {
+            "hello": "Bonjour à toi"
+        }
+    },
     "icons": {
         "advices": "Prescriptions",
         "cosmetic-products": "Beauté cosmétique",
@@ -22,6 +26,14 @@
         "optical": "Optique",
         "orthopedic": "Orthopédie",
         "pills": "Médicaments"
+    },
+    "order-status": {
+        "canceled": "Annulée",
+        "pending": "En attente de validation",
+        "in_progress": "En cours de préparation",
+        "done": "Commande disponible pour retrait",
+        "collected": "Commande retirée",
+        "no_status": "Pas de statut"
     },
     "miscellaneous": {
         "error": "Erreur",
@@ -36,6 +48,16 @@
         "look_for_drug_store": "Chercher une pharmacie (code postal)",
         "orders": "Commandes",
         "login": "Connexion",
-        "logout": "Déconnexion"
+        "logout": "Déconnexion",
+        "total_amount": "Prix total: ",
+        "name": "Nom:",
+        "quantity": "Quantité:",
+        "price": "Prix:",
+        "order_validated": "La commande a été validée avec succès",
+        "order_canceled": "La commande a été annulée avec succès",
+        "validation_in_progress": "Validation en cours...",
+        "cancellation_in_progress": "Annulation en cours...",
+        "chemist": "Pharmacien",
+        "customer": "Client"
     }
 }

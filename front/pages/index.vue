@@ -1,5 +1,6 @@
 <template>
   <div class="page-container">
+    <Loading :active.sync="isLoading" :is-full-page="true" />
     <SearchBar :desc="searchDesc" @search="search" />
     <div v-if="drugStores.length && isLoaded" class="drug-stores-container">
       <div v-for="drugStore in displayedDrugStores" :key="drugStore.id">
@@ -47,14 +48,17 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapActions } from 'vuex'
+import Loading from 'vue-loading-overlay'
 import drugStoresClient from '~/api/drugStoresClient'
 import DrugStoreContainer from '~/components/DrugStoreContainer.vue'
 import SearchBar from '~/components/SearchBar.vue'
+import 'vue-loading-overlay/dist/vue-loading.css'
 import { D, M, C, P } from '~/pages/index.types'
 
 export default Vue.extend<D, M, C, P>({
   components: {
     DrugStoreContainer,
+    Loading,
     SearchBar,
   },
   data() {
@@ -62,6 +66,7 @@ export default Vue.extend<D, M, C, P>({
       drugStores: [],
       drugStoresFromSearch: [],
       isLoaded: false,
+      isLoading: false,
       page: 1,
       perPage: 40,
       pages: [],
@@ -102,12 +107,15 @@ export default Vue.extend<D, M, C, P>({
       this.dispatchSelectDrugStore(data)
     },
     async loadDrugStores() {
+      this.isLoading = true
       try {
         this.drugStores = await drugStoresClient(this.$axios).getDrugStores()
         this.isLoaded = true
       } catch (e) {
         this.$notify('', e, 'error', 5000)
         this.isLoaded = false
+      } finally {
+        this.isLoading = false
       }
     },
     async search(searchingValue) {

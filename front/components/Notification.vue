@@ -11,7 +11,7 @@
       <icon v-if="type === 'info'" :fill="true" name="info" original />
     </div>
     <div class="notification-body">
-      <h2>{{ title }}</h2>
+      <h2 class="title">{{ title }}</h2>
       <div class="notification-body-message">
         {{ msg }}
       </div>
@@ -50,14 +50,52 @@ export default Vue.extend<D, M, C, P>({
 </script>
 
 <style lang="scss" scoped>
-.notification {
-  position: relative;
-  overflow: hidden;
-  height: 150px;
-  width: 500px;
-  background-color: $white;
-  border: 1px solid #f2f2f2;
-  @include shadow-default;
+@include window-up(md) {
+  .notification {
+    position: relative;
+    overflow: hidden;
+    height: 150px;
+    width: 500px;
+    background-color: $white;
+    border: 1px solid #f2f2f2;
+    @include shadow-default;
+  }
+  .notification-body {
+    margin: 25px 25px 0px 70px;
+    h3 {
+      text-transform: uppercase;
+    }
+    .notification-body-message {
+      opacity: 0.5;
+    }
+  }
+}
+@include window-down(md) {
+  .notification {
+    position: relative;
+    overflow: hidden;
+    background-color: $white;
+    border: 1px solid #f2f2f2;
+    .notification-close {
+      .svg-icon {
+        height: 20px;
+        width: 20px;
+      }
+    }
+  }
+  .notification-body {
+    .title {
+      text-align: center;
+      margin: 75px 15px 0px 15px;
+    }
+    h3 {
+      text-transform: uppercase;
+    }
+    .notification-body-message {
+      opacity: 0.5;
+      margin: 25px 15px 40px 15px;
+    }
+  }
 }
 .notification-icon {
   position: absolute;
@@ -66,15 +104,6 @@ export default Vue.extend<D, M, C, P>({
   .svg-icon {
     height: 38px;
     width: 38px;
-  }
-}
-.notification-body {
-  margin: 25px 25px 0px 70px;
-  h3 {
-    text-transform: uppercase;
-  }
-  .notification-body-message {
-    opacity: 0.5;
   }
 }
 .notification-close {

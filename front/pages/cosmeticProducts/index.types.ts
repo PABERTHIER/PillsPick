@@ -4,6 +4,7 @@ export interface D {
   cosmeticBeauty: IDrugs[]
   cosmeticBeautyFromSearch: IDrugs[]
   isLoaded: boolean
+  isLoading: boolean
   page: number
   perPage: number
   pages: any[]

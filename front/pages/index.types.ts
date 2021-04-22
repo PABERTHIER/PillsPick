@@ -4,6 +4,7 @@ export interface D {
   drugStores: IDrugStores[]
   drugStoresFromSearch: IDrugStores[]
   isLoaded: boolean
+  isLoading: boolean
   page: number
   perPage: number
   pages: any[]

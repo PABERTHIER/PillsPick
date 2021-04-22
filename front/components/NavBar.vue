@@ -1,60 +1,60 @@
 <template>
   <div class="navbar">
-    <nuxt-link :to="'pills'">
+    <nuxt-link :to="'/pills'">
       <div class="icon-container">
         <icon name="pill" :original="true" />
         <div v-t="'icons.pills'" class="title" />
       </div>
     </nuxt-link>
-    <nuxt-link :to="'advices'">
+    <nuxt-link :to="'/advices'">
       <div class="icon-container">
         <icon name="advice" :original="true" />
         <div v-t="'icons.advices'" class="title" />
       </div>
     </nuxt-link>
-    <nuxt-link :to="'dressings'">
+    <nuxt-link :to="'/dressings'">
       <div class="icon-container">
         <icon name="dressing" :original="true" />
         <div v-t="'icons.dressings'" class="title" />
       </div>
     </nuxt-link>
-    <nuxt-link :to="'naturalCare'">
+    <nuxt-link :to="'/naturalCare'">
       <div class="icon-container">
         <icon name="medicinal-herb" :original="true" />
         <div v-t="'icons.medicinal-herb'" class="title" />
       </div>
     </nuxt-link>
-    <nuxt-link :to="'nutrition'">
+    <nuxt-link :to="'/nutrition'">
       <div class="icon-container">
         <icon name="body" :original="true" />
         <div v-t="'icons.nutrition'" class="title" />
       </div>
     </nuxt-link>
-    <nuxt-link :to="'cosmeticProducts'">
+    <nuxt-link :to="'/cosmeticProducts'">
       <div class="icon-container">
         <icon name="cosmetic-products" :original="true" />
         <div v-t="'icons.cosmetic-products'" class="title" />
       </div>
     </nuxt-link>
-    <nuxt-link :to="'healthProducts'">
+    <nuxt-link :to="'/healthProducts'">
       <div class="icon-container">
         <icon name="health-products" :original="true" />
         <div v-t="'icons.health-products'" class="title" />
       </div>
     </nuxt-link>
-    <nuxt-link :to="'motherhood'">
+    <nuxt-link :to="'/motherhood'">
       <div class="icon-container">
         <icon name="baby" :original="true" />
         <div v-t="'icons.motherhood'" class="title" />
       </div>
     </nuxt-link>
-    <nuxt-link :to="'optical'">
+    <nuxt-link :to="'/optical'">
       <div class="icon-container">
         <icon name="eye" :original="true" />
         <div v-t="'icons.optical'" class="title" />
       </div>
     </nuxt-link>
-    <nuxt-link :to="'orthopedic'">
+    <nuxt-link :to="'/orthopedic'">
       <div class="icon-container">
         <icon name="orthopedic" :original="true" />
         <div v-t="'icons.orthopedic'" class="title" />

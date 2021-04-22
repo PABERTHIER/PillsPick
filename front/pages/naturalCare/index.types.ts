@@ -4,6 +4,7 @@ export interface D {
   naturalCare: IDrugs[]
   naturalCareFromSearch: IDrugs[]
   isLoaded: boolean
+  isLoading: boolean
   page: number
   perPage: number
   pages: any[]

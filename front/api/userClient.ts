@@ -50,5 +50,8 @@ export default ($axios: NuxtAxiosInstance) => ({
           return result as IChemist[]
         }
       })
+      .catch(() => {
+        throw { error: 'Login incorrect' }
+      })
   },
 })

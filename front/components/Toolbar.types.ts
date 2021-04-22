@@ -11,4 +11,6 @@ export interface C {}
 export interface P {
   drugStoreName?: string
   isConnected: boolean
+  userId: number
+  user?: any
 }

@@ -16,7 +16,7 @@ export const actions = {
           title: (this.app.i18n as any).t(notifErrorTitle) as string,
           msg: error.error as string,
           type: 'error',
-          duration: 5000,
+          time: 5000,
         },
         { root: true }
       )

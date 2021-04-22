@@ -4,6 +4,7 @@ export interface D {
   dietetic: IDrugs[]
   dieteticFromSearch: IDrugs[]
   isLoaded: boolean
+  isLoading: boolean
   page: number
   perPage: number
   pages: any[]

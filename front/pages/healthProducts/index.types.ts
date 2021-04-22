@@ -4,6 +4,7 @@ export interface D {
   heal: IDrugs[]
   healFromSearch: IDrugs[]
   isLoaded: boolean
+  isLoading: boolean
   page: number
   perPage: number
   pages: any[]

@@ -1,0 +1,117 @@
+<template>
+  <div class="page-container">
+    <Loading :active.sync="isLoading" :is-full-page="true" />
+    <div class="orders">
+      <OrderContainer
+        v-for="order in orders"
+        :key="order.id"
+        class="order"
+        :data="order"
+        :user-type="userType"
+        @validateOrder="validateOrder"
+        @cancelOrder="cancelOrder"
+      />
+    </div>
+  </div>
+</template>
+
+<script lang="ts">
+import Vue from 'vue'
+import { mapState } from 'vuex'
+import Loading from 'vue-loading-overlay'
+import ordersClient from '~/api/ordersClient'
+import OrderContainer from '~/components/OrderContainer.vue'
+import 'vue-loading-overlay/dist/vue-loading.css'
+import { D, M, C, P } from '~/pages/orders/_id.types'
+
+export default Vue.extend<D, M, C, P>({
+  components: {
+    Loading,
+    OrderContainer,
+  },
+  props: {},
+  data() {
+    return {
+      orders: [],
+      isLoading: false,
+    }
+  },
+  computed: {
+    ...mapState('user', ['user']),
+    userId() {
+      return this.$route.params.id
+    },
+    drugStoreId() {
+      return this.user.drugStoreId
+    },
+    userType() {
+      return this.user ? this.user.type : 'customer'
+    },
+  },
+  mounted() {
+    this.loadOrders()
+  },
+  methods: {
+    async loadOrders() {
+      this.isLoading = true
+      try {
+        if (this.userType === 'chemist') {
+          this.orders = await ordersClient(this.$axios).getOrdersByDrugStoreId(
+            this.drugStoreId
+          )
+        } else {
+          this.orders = await ordersClient(this.$axios).getOrdersByCustomerId(
+            this.userId
+          )
+        }
+      } catch (e) {
+        this.$notify('', e, 'error', 5000)
+      } finally {
+        this.isLoading = false
+      }
+    },
+    async validateOrder(orderId) {
+      try {
+        const msgInfo = this.$t(
+          'miscellaneous.validation_in_progress'
+        ) as string
+        this.$notify('', msgInfo, 'info', 2000)
+        await ordersClient(this.$axios).validateOrder(orderId)
+        const msg = this.$t('miscellaneous.order_validated') as string
+        this.$notify('', msg, 'success', 5000)
+        this.loadOrders()
+      } catch (e) {
+        this.$notify('', e, 'error', 5000)
+      }
+    },
+    async cancelOrder(orderId) {
+      try {
+        const msgInfo = this.$t(
+          'miscellaneous.cancellation_in_progress'
+        ) as string
+        this.$notify('', msgInfo, 'info', 2000)
+        await ordersClient(this.$axios).cancelOrder(orderId)
+        const msg = this.$t('miscellaneous.order_canceled') as string
+        this.$notify('', msg, 'success', 5000)
+        this.loadOrders()
+      } catch (e) {
+        this.$notify('', e, 'error', 5000)
+      }
+    },
+  },
+})
+</script>
+
+<style lang="scss" scoped>
+.page-container {
+  .orders {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    .order {
+      max-width: 500px;
+      margin-right: 40px;
+    }
+  }
+}
+</style>

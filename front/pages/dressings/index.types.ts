@@ -4,6 +4,7 @@ export interface D {
   dressings: IDrugs[]
   dressingsFromSearch: IDrugs[]
   isLoaded: boolean
+  isLoading: boolean
   page: number
   perPage: number
   pages: any[]

@@ -41,7 +41,13 @@ export default Vue.extend<D, M, C, P>({
   mounted() {},
   methods: {
     openDrugStore() {
-      window.open('//' + this.data.url, '_blank')
+      const expression = /(https?:\/\/[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,})/gi
+      const regex = new RegExp(expression)
+      if (this.data.url.match(regex)) {
+        window.open(this.data.url, '_blank')
+      } else {
+        window.open('http://' + this.data.url, '_blank')
+      }
     },
     select() {
       this.$emit('selectDrugStore', this.data)

@@ -1,5 +1,6 @@
 <template>
   <div class="page-container">
+    <Loading :active.sync="isLoading" :is-full-page="true" />
     <SearchBar :desc="searchDesc" @search="search" />
     <div
       v-if="cosmeticBeauty && cosmeticBeauty.length"
@@ -10,7 +11,11 @@
         :key="cb.id"
         class="cosmetic-beauty"
       >
-        <PillContainer :drug="cb" class="cb" />
+        <PillContainer
+          :drug="cb"
+          :picture-name="'cosmetic-products'"
+          class="cb"
+        />
       </div>
     </div>
     <div v-if="isLoaded && cosmeticBeautyData.length" class="pagination">
@@ -49,13 +54,16 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import Loading from 'vue-loading-overlay'
 import drugsClient from '~/api/drugsClient'
 import SearchBar from '~/components/SearchBar.vue'
 import PillContainer from '~/components/PillContainer.vue'
+import 'vue-loading-overlay/dist/vue-loading.css'
 import { D, M, C, P } from '~/pages/cosmeticProducts/index.types'
 
 export default Vue.extend<D, M, C, P>({
   components: {
+    Loading,
     PillContainer,
     SearchBar,
   },
@@ -65,6 +73,7 @@ export default Vue.extend<D, M, C, P>({
       cosmeticBeauty: [],
       cosmeticBeautyFromSearch: [],
       isLoaded: false,
+      isLoading: false,
       page: 1,
       perPage: 40,
       pages: [],
@@ -96,6 +105,7 @@ export default Vue.extend<D, M, C, P>({
   },
   methods: {
     async loadCosmeticBeauty() {
+      this.isLoading = true
       try {
         const result = await drugsClient(this.$axios).getDrugs()
         this.cosmeticBeauty = result.filter(
@@ -105,6 +115,8 @@ export default Vue.extend<D, M, C, P>({
       } catch (e) {
         this.$notify('', e, 'error', 5000)
         this.isLoaded = false
+      } finally {
+        this.isLoading = false
       }
     },
     async search(searchingValue) {

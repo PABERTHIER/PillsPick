@@ -8,4 +8,5 @@ export interface C {}
 
 export interface P {
   drug: IDrugs
+  pictureName: string
 }

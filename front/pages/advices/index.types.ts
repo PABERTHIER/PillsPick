@@ -4,6 +4,7 @@ export interface D {
   advices: IDrugs[]
   advicesFromSearch: IDrugs[]
   isLoaded: boolean
+  isLoading: boolean
   page: number
   perPage: number
   pages: any[]

@@ -28,6 +28,7 @@ const config = {
     '~/plugins/notifications',
     '~/plugins/svg',
     '~/plugins/vuejs-dialog',
+    '~/plugins/vue-loading',
     '~/plugins/vue-mq',
   ],
   /*

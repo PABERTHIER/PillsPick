@@ -2,7 +2,7 @@
   <div class="pill-container">
     <div class="picture-container">
       <div class="toto">
-        <img class="picture" :src="`icon.png`" />
+        <icon :name="pictureName" :original="true" class="picture" />
       </div>
       <div class="icon-add">
         <icon name="add" />
@@ -35,6 +35,10 @@ export default Vue.extend<D, M, C, P>({
       type: Object,
       required: true,
     },
+    pictureName: {
+      type: String,
+      required: true,
+    },
   },
   data() {
     return {}
@@ -55,6 +59,7 @@ export default Vue.extend<D, M, C, P>({
     .toto {
       width: 100%;
       text-align: center;
+      margin-top: 10px;
       .picture {
         width: 50px;
         height: 50px;

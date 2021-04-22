@@ -59,3 +59,32 @@ export interface IChemist {
   phoneNumber: string
   type: string
 }
+
+export enum IStatusOrder {
+  Canceled = 0,
+  Pending = 1,
+  InProgress = 2,
+  Done = 3,
+  Collected = 4,
+}
+
+export interface IOrderData {
+  id: number
+  name: string
+  type: string
+  instructions: string
+  pictureId: number
+  cisCode: number
+  routeAdministration: string
+  owner: string
+  isWatched: boolean
+  headerName: string
+  quantity: number
+  price: number
+}
+export interface IOrders {
+  idOrder: number
+  status: IStatusOrder
+  drugStoreName: string
+  orderData: IOrderData[]
+}

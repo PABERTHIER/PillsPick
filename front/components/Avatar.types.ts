@@ -6,6 +6,7 @@ export interface M {
   togglePopup: () => void
   connect: () => void
   disconnect: () => void
+  closePopup: () => void
 }
 
 export interface C {
@@ -14,4 +15,6 @@ export interface C {
 
 export interface P {
   isConnected: boolean
+  userId: number
+  user?: any
 }

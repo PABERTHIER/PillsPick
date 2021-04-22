@@ -16,7 +16,7 @@ export default Vue.extend<D, M, C, P>({
     arrowPosition: {
       type: Number,
       required: false,
-      default: 140,
+      default: 133,
     },
   },
   data() {

@@ -1,5 +1,5 @@
 <template>
-  <div class="avatar-container">
+  <div v-click-outside="closePopup" class="avatar-container">
     <icon
       name="avatar"
       :original="true"
@@ -8,13 +8,19 @@
       @click="togglePopup"
     />
     <Popup v-if="showActions" class="popup">
-      <div class="content" @click.stop>
-        <div v-if="isConnected" class="orders link">
+      <div class="content">
+        <HeyYou v-if="user" :user="user" class="hey" />
+        <nuxt-link
+          v-if="userId !== 0"
+          :to="`/orders/${userId}`"
+          class="orders link"
+          @click.native="closePopup"
+        >
           <div class="icon">
             <icon name="order" />
           </div>
           <div v-t="'miscellaneous.orders'" />
-        </div>
+        </nuxt-link>
         <div v-if="!isConnected" class="login link" @click="connect()">
           <div class="icon">
             <icon name="power-button" />
@@ -34,17 +40,48 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import HeyYou from '~/components/HeyYou.vue'
 import Popup from '~/components/Popup.vue'
 import { D, M, C, P } from '~/components/Avatar.types'
 
 export default Vue.extend<D, M, C, P>({
   components: {
+    HeyYou,
     Popup,
+  },
+  directives: {
+    'click-outside': {
+      bind(el: any, binding, vNode) {
+        const bubble = binding.modifiers.bubble
+        const handler = (e) => {
+          if (bubble || (!el.contains(e.target) && el !== e.target)) {
+            binding.value(e)
+          }
+        }
+        el.__vueClickOutside__ = handler
+
+        document.addEventListener('click', handler)
+      },
+
+      unbind(el: any, binding) {
+        document.removeEventListener('click', el.__vueClickOutside__)
+        el.__vueClickOutside__ = null
+      },
+    },
   },
   props: {
     isConnected: {
       type: Boolean,
       required: true,
+    },
+    userId: {
+      type: Number,
+      required: true,
+    },
+    user: {
+      type: Object,
+      required: false,
+      default: undefined,
     },
   },
   data() {
@@ -72,6 +109,9 @@ export default Vue.extend<D, M, C, P>({
       this.$emit('disconnect')
       this.togglePopup()
     },
+    closePopup() {
+      this.showActions = false
+    },
   },
 })
 </script>
@@ -82,14 +122,23 @@ export default Vue.extend<D, M, C, P>({
     border-radius: 50%;
   }
   .not-connected {
-    border: 2px solid $red;
+    border: 8px solid $red;
+    &.svg-icon {
+      fill-opacity: 0.3;
+    }
   }
   .connected {
-    border: 2px solid $green;
+    border: 8px solid $green;
+    &.svg-icon {
+      fill-opacity: 1;
+    }
   }
   .popup {
     right: 0px;
     width: 198px;
+    .hey {
+      margin-bottom: 25px;
+    }
     .content {
       padding: 10px;
       color: $black;

@@ -15,6 +15,7 @@ export interface C {
   notifications?: INotification[]
   drugStore?: IDrugStores
   isConnected: boolean
+  user: any
   drugStoreName?: string
 }
 
