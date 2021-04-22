@@ -1,6 +1,5 @@
 <template>
   <div class="page-container">
-    <Loading :active.sync="isLoading" :is-full-page="true" />
     <div class="orders">
       <OrderContainer
         v-for="order in orders"
@@ -18,15 +17,12 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import Loading from 'vue-loading-overlay'
 import ordersClient from '~/api/ordersClient'
 import OrderContainer from '~/components/OrderContainer.vue'
-import 'vue-loading-overlay/dist/vue-loading.css'
 import { D, M, C, P } from '~/pages/orders/_id.types'
 
 export default Vue.extend<D, M, C, P>({
   components: {
-    Loading,
     OrderContainer,
   },
   props: {},
@@ -54,6 +50,9 @@ export default Vue.extend<D, M, C, P>({
   methods: {
     async loadOrders() {
       this.isLoading = true
+      const loader = this.$loading.show({
+        container: undefined,
+      })
       try {
         if (this.userType === 'chemist') {
           this.orders = await ordersClient(this.$axios).getOrdersByDrugStoreId(
@@ -68,6 +67,7 @@ export default Vue.extend<D, M, C, P>({
         this.$notify('', e, 'error', 5000)
       } finally {
         this.isLoading = false
+        loader.hide()
       }
     },
     async validateOrder(orderId) {

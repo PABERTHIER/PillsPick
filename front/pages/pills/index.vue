@@ -1,6 +1,5 @@
 <template>
   <div class="page-container">
-    <Loading :active.sync="isLoading" :is-full-page="true" />
     <SearchBar :desc="searchDesc" @search="search" />
     <div v-if="drugs && drugs.length" class="drugs-container">
       <div v-for="drug in displayedDrugs" :key="drug.id" class="drugs">
@@ -53,18 +52,15 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import Loading from 'vue-loading-overlay'
 import drugsClient from '~/api/drugsClient'
 // import Pagination from '~/components/Pagination.vue'
 import SearchBar from '~/components/SearchBar.vue'
 import PillContainer from '~/components/PillContainer.vue'
-import 'vue-loading-overlay/dist/vue-loading.css'
 import { D, M, C, P } from '~/pages/pills/index.types'
 
 export default Vue.extend<D, M, C, P>({
   components: {
     // Pagination,
-    Loading,
     PillContainer,
     SearchBar,
   },
@@ -107,6 +103,9 @@ export default Vue.extend<D, M, C, P>({
   methods: {
     async loadDrugs() {
       this.isLoading = true
+      const loader = this.$loading.show({
+        container: undefined,
+      })
       try {
         const result = await drugsClient(this.$axios).getDrugs()
         this.drugs = result.filter((x) => x.headerName === 'drug')
@@ -116,6 +115,7 @@ export default Vue.extend<D, M, C, P>({
         this.isLoaded = false
       } finally {
         this.isLoading = false
+        loader.hide()
       }
     },
     async search(searchingValue) {

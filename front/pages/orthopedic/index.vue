@@ -1,6 +1,5 @@
 <template>
   <div class="page-container">
-    <Loading :active.sync="isLoading" :is-full-page="true" />
     <SearchBar :desc="searchDesc" @search="search" />
     <div v-if="orthopedic && orthopedic.length" class="orthopedic-container">
       <div v-for="opt in displayedOrthopedic" :key="opt.id" class="orthopedic">
@@ -43,16 +42,13 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import Loading from 'vue-loading-overlay'
 import drugsClient from '~/api/drugsClient'
 import SearchBar from '~/components/SearchBar.vue'
 import PillContainer from '~/components/PillContainer.vue'
-import 'vue-loading-overlay/dist/vue-loading.css'
 import { D, M, C, P } from '~/pages/orthopedic/index.types'
 
 export default Vue.extend<D, M, C, P>({
   components: {
-    Loading,
     PillContainer,
     SearchBar,
   },
@@ -95,6 +91,9 @@ export default Vue.extend<D, M, C, P>({
   methods: {
     async loadOrthopedic() {
       this.isLoading = true
+      const loader = this.$loading.show({
+        container: undefined,
+      })
       try {
         const result = await drugsClient(this.$axios).getDrugs()
         this.orthopedic = result.filter((x) => x.headerName === 'orthopedic')
@@ -104,6 +103,7 @@ export default Vue.extend<D, M, C, P>({
         this.isLoaded = false
       } finally {
         this.isLoading = false
+        loader.hide()
       }
     },
     async search(searchingValue) {

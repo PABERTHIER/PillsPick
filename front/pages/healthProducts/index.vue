@@ -1,6 +1,5 @@
 <template>
   <div class="page-container">
-    <Loading :active.sync="isLoading" :is-full-page="true" />
     <SearchBar :desc="searchDesc" @search="search" />
     <div v-if="heal && heal.length" class="heal-container">
       <div v-for="hl in displayedHeal" :key="hl.id" class="heal">
@@ -47,16 +46,13 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import Loading from 'vue-loading-overlay'
 import drugsClient from '~/api/drugsClient'
 import SearchBar from '~/components/SearchBar.vue'
 import PillContainer from '~/components/PillContainer.vue'
-import 'vue-loading-overlay/dist/vue-loading.css'
 import { D, M, C, P } from '~/pages/healthProducts/index.types'
 
 export default Vue.extend<D, M, C, P>({
   components: {
-    Loading,
     PillContainer,
     SearchBar,
   },
@@ -99,6 +95,9 @@ export default Vue.extend<D, M, C, P>({
   methods: {
     async loadHeal() {
       this.isLoading = true
+      const loader = this.$loading.show({
+        container: undefined,
+      })
       try {
         const result = await drugsClient(this.$axios).getDrugs()
         this.heal = result.filter((x) => x.headerName === 'heal')
@@ -108,6 +107,7 @@ export default Vue.extend<D, M, C, P>({
         this.isLoaded = false
       } finally {
         this.isLoading = false
+        loader.hide()
       }
     },
     async search(searchingValue) {

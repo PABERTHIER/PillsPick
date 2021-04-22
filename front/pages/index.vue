@@ -1,6 +1,5 @@
 <template>
   <div class="page-container">
-    <Loading :active.sync="isLoading" :is-full-page="true" />
     <SearchBar :desc="searchDesc" @search="search" />
     <div v-if="drugStores.length && isLoaded" class="drug-stores-container">
       <div v-for="drugStore in displayedDrugStores" :key="drugStore.id">
@@ -48,17 +47,14 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapActions } from 'vuex'
-import Loading from 'vue-loading-overlay'
 import drugStoresClient from '~/api/drugStoresClient'
 import DrugStoreContainer from '~/components/DrugStoreContainer.vue'
 import SearchBar from '~/components/SearchBar.vue'
-import 'vue-loading-overlay/dist/vue-loading.css'
 import { D, M, C, P } from '~/pages/index.types'
 
 export default Vue.extend<D, M, C, P>({
   components: {
     DrugStoreContainer,
-    Loading,
     SearchBar,
   },
   data() {
@@ -108,6 +104,9 @@ export default Vue.extend<D, M, C, P>({
     },
     async loadDrugStores() {
       this.isLoading = true
+      const loader = this.$loading.show({
+        container: undefined,
+      })
       try {
         this.drugStores = await drugStoresClient(this.$axios).getDrugStores()
         this.isLoaded = true
@@ -116,6 +115,7 @@ export default Vue.extend<D, M, C, P>({
         this.isLoaded = false
       } finally {
         this.isLoading = false
+        loader.hide()
       }
     },
     async search(searchingValue) {
