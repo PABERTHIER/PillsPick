@@ -1,3 +1,4 @@
+import { IDrugs } from '~/api/api.type'
 export interface D {
   showActions: boolean
 }
@@ -10,6 +11,7 @@ export interface M {
 }
 
 export interface C {
+  cart: IDrugs[]
   status: string
 }
 

@@ -11,5 +11,5 @@ export interface C {}
 export interface P {
   title: string
   msg: string
-  type: NotificationType
+  type: NotificationType | string
 }

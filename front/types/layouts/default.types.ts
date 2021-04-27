@@ -5,10 +5,12 @@ export interface D {}
 
 export interface M {
   deleteNotification?: () => void
+  clearCart: () => void
   dispatchLogin: (login: string) => void
   dispatchLogout: () => void
   removeDrugStore: () => void
   connect: () => void
+  disconnect: () => void
 }
 
 export interface C {

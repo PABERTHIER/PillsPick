@@ -15,6 +15,7 @@ export interface C {
   userId: any
   drugStoreId: number
   user: any
+  isConnected: boolean
   userType: string
 }
 

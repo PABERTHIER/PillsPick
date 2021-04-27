@@ -45,12 +45,13 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import drugsClient from '~/api/drugsClient'
+import { mapState, mapActions } from 'vuex'
 import SearchBar from '~/components/SearchBar.vue'
 import PillContainer from '~/components/PillContainer.vue'
 import { D, M, C, P } from '~/pages/naturalCare/index.types'
 
 export default Vue.extend<D, M, C, P>({
+  name: 'Index',
   components: {
     PillContainer,
     SearchBar,
@@ -69,6 +70,7 @@ export default Vue.extend<D, M, C, P>({
     }
   },
   computed: {
+    ...mapState('drugs', { naturalCares: 'naturalCare' }),
     displayedNaturalCare() {
       return this.paginate(this.naturalCareData)
     },
@@ -89,17 +91,27 @@ export default Vue.extend<D, M, C, P>({
     },
   },
   mounted() {
-    this.loadNaturalCare()
+    if (this.naturalCares && this.naturalCares.length) {
+      this.naturalCare = this.naturalCares.map((x) => {
+        return x
+      })
+      this.isLoaded = true
+    } else {
+      this.loadNaturalCare()
+    }
   },
   methods: {
+    ...mapActions('drugs', ['dispatchNaturalCare']),
     async loadNaturalCare() {
       this.isLoading = true
       const loader = this.$loading.show({
         container: undefined,
       })
       try {
-        const result = await drugsClient(this.$axios).getDrugs()
-        this.naturalCare = result.filter((x) => x.headerName === 'natural_care')
+        await this.dispatchNaturalCare()
+        this.naturalCare = this.naturalCares.map((x) => {
+          return x
+        })
         this.isLoaded = true
       } catch (e) {
         this.$notify('', e, 'error', 5000)
@@ -109,27 +121,22 @@ export default Vue.extend<D, M, C, P>({
         loader.hide()
       }
     },
-    async search(searchingValue) {
+    search(searchingValue) {
       if (searchingValue === undefined || searchingValue === '') {
         this.naturalCareFromSearch = this.naturalCare
         this.setPages()
       } else {
-        try {
-          const result = await drugsClient(this.$axios).getDrugsByName(
-            searchingValue
-          )
-          if (result.length === 0) {
-            this.searchEmpty = true
-          } else {
-            this.naturalCareFromSearch = result.filter(
-              (x) => x.headerName === 'natural_care'
-            )
-            this.searchEmpty = false
-          }
-          this.setPages()
-        } catch (e) {
-          this.$notify('', e, 'error', 5000)
+        this.page = 1
+        const naturalCareFromSearch = this.naturalCares.filter((x) =>
+          x.name.startsWith(searchingValue.toUpperCase())
+        )
+        if (naturalCareFromSearch.length) {
+          this.naturalCareFromSearch = naturalCareFromSearch
+          this.searchEmpty = false
+        } else {
+          this.searchEmpty = true
         }
+        this.setPages()
       }
     },
     setPages() {

@@ -50,12 +50,13 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import drugsClient from '~/api/drugsClient'
+import { mapState, mapActions } from 'vuex'
 import SearchBar from '~/components/SearchBar.vue'
 import PillContainer from '~/components/PillContainer.vue'
 import { D, M, C, P } from '~/pages/dressings/index.types'
 
 export default Vue.extend<D, M, C, P>({
+  name: 'Index',
   components: {
     PillContainer,
     SearchBar,
@@ -74,6 +75,7 @@ export default Vue.extend<D, M, C, P>({
     }
   },
   computed: {
+    ...mapState('drugs', { pads: 'dressings' }),
     displayedDressings() {
       return this.paginate(this.dressingsData)
     },
@@ -94,17 +96,27 @@ export default Vue.extend<D, M, C, P>({
     },
   },
   mounted() {
-    this.loadDressings()
+    if (this.pads && this.pads.length) {
+      this.dressings = this.pads.map((x) => {
+        return x
+      })
+      this.isLoaded = true
+    } else {
+      this.loadDressings()
+    }
   },
   methods: {
+    ...mapActions('drugs', ['dispatchDressings']),
     async loadDressings() {
       this.isLoading = true
       const loader = this.$loading.show({
         container: undefined,
       })
       try {
-        const result = await drugsClient(this.$axios).getDrugs()
-        this.dressings = result.filter((x) => x.headerName === 'pad')
+        await this.dispatchDressings()
+        this.dressings = this.pads.map((x) => {
+          return x
+        })
         this.isLoaded = true
       } catch (e) {
         this.$notify('', e, 'error', 5000)
@@ -114,27 +126,22 @@ export default Vue.extend<D, M, C, P>({
         loader.hide()
       }
     },
-    async search(searchingValue) {
+    search(searchingValue) {
       if (searchingValue === undefined || searchingValue === '') {
         this.dressingsFromSearch = this.dressings
         this.setPages()
       } else {
-        try {
-          const result = await drugsClient(this.$axios).getDrugsByName(
-            searchingValue
-          )
-          if (result.length === 0) {
-            this.searchEmpty = true
-          } else {
-            this.dressingsFromSearch = result.filter(
-              (x) => x.headerName === 'pad'
-            )
-            this.searchEmpty = false
-          }
-          this.setPages()
-        } catch (e) {
-          this.$notify('', e, 'error', 5000)
+        this.page = 1
+        const dressingsFromSearch = this.pads.filter((x) =>
+          x.name.startsWith(searchingValue.toUpperCase())
+        )
+        if (dressingsFromSearch.length) {
+          this.dressingsFromSearch = dressingsFromSearch
+          this.searchEmpty = false
+        } else {
+          this.searchEmpty = true
         }
+        this.setPages()
       }
     },
     setPages() {

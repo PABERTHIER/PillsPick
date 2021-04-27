@@ -8,7 +8,7 @@
         :user="user ? user : undefined"
         @deleteDrugStoreName="removeDrugStore"
         @connect="connect"
-        @disconnect="dispatchLogout"
+        @disconnect="disconnect"
       />
     </header>
     <div id="bodyContainer">
@@ -67,11 +67,18 @@ export default Vue.extend<D, M, C, P>({
   },
   methods: {
     ...mapMutations('notifications', ['deleteNotification']),
+    ...mapActions('drugs', ['clearCart']),
     ...mapActions('drugStores', ['removeDrugStore']),
     ...mapActions('user', ['dispatchLogin', 'dispatchLogout']),
     connect() {
-      const login = prompt('Entrer votre login:')
+      const strLogin = this.$t('miscellaneous.enter_login') as string
+      const login = prompt(strLogin)
       this.dispatchLogin(login!)
+    },
+    disconnect() {
+      this.dispatchLogout()
+      this.clearCart()
+      this.$router.replace('/')
     },
   },
 })

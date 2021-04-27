@@ -42,12 +42,13 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import drugsClient from '~/api/drugsClient'
+import { mapState, mapActions } from 'vuex'
 import SearchBar from '~/components/SearchBar.vue'
 import PillContainer from '~/components/PillContainer.vue'
 import { D, M, C, P } from '~/pages/motherhood/index.types'
 
 export default Vue.extend<D, M, C, P>({
+  name: 'Index',
   components: {
     PillContainer,
     SearchBar,
@@ -66,6 +67,7 @@ export default Vue.extend<D, M, C, P>({
     }
   },
   computed: {
+    ...mapState('drugs', ['motherhood']),
     displayedMaternity() {
       return this.paginate(this.maternityData)
     },
@@ -86,17 +88,27 @@ export default Vue.extend<D, M, C, P>({
     },
   },
   mounted() {
-    this.loadMaternity()
+    if (this.motherhood && this.motherhood.length) {
+      this.maternity = this.motherhood.map((x) => {
+        return x
+      })
+      this.isLoaded = true
+    } else {
+      this.loadMaternity()
+    }
   },
   methods: {
+    ...mapActions('drugs', ['dispatchMotherhood']),
     async loadMaternity() {
       this.isLoading = true
       const loader = this.$loading.show({
         container: undefined,
       })
       try {
-        const result = await drugsClient(this.$axios).getDrugs()
-        this.maternity = result.filter((x) => x.headerName === 'maternity')
+        await this.dispatchMotherhood()
+        this.maternity = this.motherhood.map((x) => {
+          return x
+        })
         this.isLoaded = true
       } catch (e) {
         this.$notify('', e, 'error', 5000)
@@ -106,27 +118,22 @@ export default Vue.extend<D, M, C, P>({
         loader.hide()
       }
     },
-    async search(searchingValue) {
+    search(searchingValue) {
       if (searchingValue === undefined || searchingValue === '') {
         this.maternityFromSearch = this.maternity
         this.setPages()
       } else {
-        try {
-          const result = await drugsClient(this.$axios).getDrugsByName(
-            searchingValue
-          )
-          if (result.length === 0) {
-            this.searchEmpty = true
-          } else {
-            this.maternityFromSearch = result.filter(
-              (x) => x.headerName === 'maternity'
-            )
-            this.searchEmpty = false
-          }
-          this.setPages()
-        } catch (e) {
-          this.$notify('', e, 'error', 5000)
+        this.page = 1
+        const maternityFromSearch = this.motherhood.filter((x) =>
+          x.name.startsWith(searchingValue.toUpperCase())
+        )
+        if (maternityFromSearch.length) {
+          this.maternityFromSearch = maternityFromSearch
+          this.searchEmpty = false
+        } else {
+          this.searchEmpty = true
         }
+        this.setPages()
       }
     },
     setPages() {

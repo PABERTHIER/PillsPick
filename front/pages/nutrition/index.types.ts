@@ -12,6 +12,7 @@ export interface D {
 }
 
 export interface M {
+  dispatchNutrition: () => void
   loadDietetic: () => void
   search: (searchingValue: string) => void
   setPages: () => void
@@ -19,6 +20,7 @@ export interface M {
 }
 
 export interface C {
+  nutrition: IDrugs[]
   displayedDietetic: IDrugs[]
   dieteticData: IDrugs[]
   searchDesc: string

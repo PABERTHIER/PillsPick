@@ -12,6 +12,7 @@ export interface D {
 }
 
 export interface M {
+  dispatchDressings: () => void
   loadDressings: () => void
   search: (searchingValue: string) => void
   setPages: () => void
@@ -19,6 +20,7 @@ export interface M {
 }
 
 export interface C {
+  pads: IDrugs[]
   displayedDressings: IDrugs[]
   dressingsData: IDrugs[]
   searchDesc: string

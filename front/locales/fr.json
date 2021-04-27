@@ -58,6 +58,13 @@
         "validation_in_progress": "Validation en cours...",
         "cancellation_in_progress": "Annulation en cours...",
         "chemist": "Pharmacien",
-        "customer": "Client"
+        "customer": "Client",
+        "enter_login": "Entrez votre login:",
+        "cart": "Panier",
+        "drug_added_cart": "{drug} ajouté au panier",
+        "drugstore_required": "Veuillez sélectionner une pharmacie",
+        "connection_required": "Veuillez vous connecter",
+        "cart_empty": "Votre panier est vide",
+        "validate_cart": "Valider le panier"
     }
 }

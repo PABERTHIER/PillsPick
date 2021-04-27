@@ -12,6 +12,7 @@ export interface D {
 }
 
 export interface M {
+  dispatchOrthopedic: () => void
   loadOrthopedic: () => void
   search: (searchingValue: string) => void
   setPages: () => void
@@ -19,6 +20,7 @@ export interface M {
 }
 
 export interface C {
+  orthopedics: IDrugs[]
   displayedOrthopedic: IDrugs[]
   orthopedicData: IDrugs[]
   searchDesc: string

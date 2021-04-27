@@ -52,13 +52,15 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import drugsClient from '~/api/drugsClient'
+import { mapState, mapActions } from 'vuex'
+// import drugsClient from '~/api/drugsClient'
 // import Pagination from '~/components/Pagination.vue'
 import SearchBar from '~/components/SearchBar.vue'
 import PillContainer from '~/components/PillContainer.vue'
 import { D, M, C, P } from '~/pages/pills/index.types'
 
 export default Vue.extend<D, M, C, P>({
+  name: 'Index',
   components: {
     // Pagination,
     PillContainer,
@@ -78,6 +80,7 @@ export default Vue.extend<D, M, C, P>({
     }
   },
   computed: {
+    ...mapState('drugs', ['pills']),
     displayedDrugs() {
       return this.paginate(this.drugsData)
     },
@@ -98,17 +101,31 @@ export default Vue.extend<D, M, C, P>({
     },
   },
   mounted() {
-    this.loadDrugs()
+    if (this.pills && this.pills.length) {
+      this.drugs = this.pills.map((x) => {
+        return x
+      })
+      this.isLoaded = true
+    } else {
+      this.loadDrugs()
+    }
   },
   methods: {
+    ...mapActions('drugs', ['dispatchPills']),
     async loadDrugs() {
       this.isLoading = true
       const loader = this.$loading.show({
         container: undefined,
       })
       try {
-        const result = await drugsClient(this.$axios).getDrugs()
-        this.drugs = result.filter((x) => x.headerName === 'drug')
+        // const result = await drugsClient(this.$axios).getDrugsByHeaderName(
+        //   'drug'
+        // )
+        await this.dispatchPills()
+        this.drugs = this.pills.map((x) => {
+          return x
+        })
+        // this.drugs = result.filter((x) => x.headerName === 'drug')
         this.isLoaded = true
       } catch (e) {
         this.$notify('', e, 'error', 5000)
@@ -118,27 +135,49 @@ export default Vue.extend<D, M, C, P>({
         loader.hide()
       }
     },
-    async search(searchingValue) {
+    search(searchingValue) {
       if (searchingValue === undefined || searchingValue === '') {
         this.drugsFromSearch = this.drugs
         this.setPages()
       } else {
-        try {
-          const result = await drugsClient(this.$axios).getDrugsByName(
-            searchingValue
-          )
-          if (result.length === 0) {
-            this.searchEmpty = true
-          } else {
-            this.drugsFromSearch = result.filter((x) => x.headerName === 'drug')
-            this.searchEmpty = false
-          }
-          this.setPages()
-        } catch (e) {
-          this.$notify('', e, 'error', 5000)
+        this.page = 1
+        const drugsFromSearch = this.pills.filter((x) =>
+          x.name.startsWith(searchingValue.toUpperCase())
+        )
+        if (drugsFromSearch.length) {
+          this.drugsFromSearch = drugsFromSearch
+          this.searchEmpty = false
+        } else {
+          this.searchEmpty = true
         }
+        this.setPages()
       }
     },
+    // async search(searchingValue) {
+    //   if (searchingValue === undefined || searchingValue === '') {
+    //     this.drugsFromSearch = this.drugs
+    //     this.setPages()
+    //   } else {
+    //     try {
+    //       const result = await drugsClient(this.$axios).getDrugsByName(
+    //         searchingValue,
+    //         'drug'
+    //       )
+    //       if (result.length === 0) {
+    //         this.searchEmpty = true
+    //       } else {
+    //         this.drugsFromSearch = result.map((x) => {
+    //           return x
+    //         })
+    //         // this.drugsFromSearch = result.filter((x) => x.headerName === 'drug')
+    //         this.searchEmpty = false
+    //       }
+    //       this.setPages()
+    //     } catch (e) {
+    //       this.$notify('', e, 'error', 5000)
+    //     }
+    //   }
+    // },
     // goToPrevious() {
     //   this.page++
     // },

@@ -12,6 +12,7 @@ export interface D {
 }
 
 export interface M {
+  dispatchCosmeticProducts: () => void
   loadCosmeticBeauty: () => void
   search: (searchingValue: string) => void
   setPages: () => void
@@ -19,6 +20,7 @@ export interface M {
 }
 
 export interface C {
+  cosmeticProducts: IDrugs[]
   displayedCosmeticBeauty: IDrugs[]
   cosmeticBeautyData: IDrugs[]
   searchDesc: string

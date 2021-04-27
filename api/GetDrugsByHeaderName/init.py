@@ -16,9 +16,8 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         raise err
     else:
         cursor = cnxn.cursor()
-        name = req.route_params.get('name')
         headerName = req.route_params.get('headerName')
-        sql = "SELECT * FROM Drug WHERE name LIKE '" + name + "%' AND header_name LIKE '" + headerName + "%'"
+        sql = "SELECT * FROM Drug WHERE header_name LIKE '" + headerName + "%'"
         cursor.execute(sql)
         rows = cursor.fetchall()
         data = []

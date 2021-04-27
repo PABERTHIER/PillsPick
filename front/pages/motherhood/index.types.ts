@@ -12,6 +12,7 @@ export interface D {
 }
 
 export interface M {
+  dispatchMotherhood: () => void
   loadMaternity: () => void
   search: (searchingValue: string) => void
   setPages: () => void
@@ -19,6 +20,7 @@ export interface M {
 }
 
 export interface C {
+  motherhood: IDrugs[]
   displayedMaternity: IDrugs[]
   maternityData: IDrugs[]
   searchDesc: string

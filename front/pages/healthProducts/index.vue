@@ -46,12 +46,13 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import drugsClient from '~/api/drugsClient'
+import { mapState, mapActions } from 'vuex'
 import SearchBar from '~/components/SearchBar.vue'
 import PillContainer from '~/components/PillContainer.vue'
 import { D, M, C, P } from '~/pages/healthProducts/index.types'
 
 export default Vue.extend<D, M, C, P>({
+  name: 'Index',
   components: {
     PillContainer,
     SearchBar,
@@ -70,6 +71,7 @@ export default Vue.extend<D, M, C, P>({
     }
   },
   computed: {
+    ...mapState('drugs', ['healthProducts']),
     displayedHeal() {
       return this.paginate(this.healData)
     },
@@ -90,17 +92,27 @@ export default Vue.extend<D, M, C, P>({
     },
   },
   mounted() {
-    this.loadHeal()
+    if (this.healthProducts && this.healthProducts.length) {
+      this.heal = this.healthProducts.map((x) => {
+        return x
+      })
+      this.isLoaded = true
+    } else {
+      this.loadHeal()
+    }
   },
   methods: {
+    ...mapActions('drugs', ['dispatchHealthProducts']),
     async loadHeal() {
       this.isLoading = true
       const loader = this.$loading.show({
         container: undefined,
       })
       try {
-        const result = await drugsClient(this.$axios).getDrugs()
-        this.heal = result.filter((x) => x.headerName === 'heal')
+        await this.dispatchHealthProducts()
+        this.heal = this.healthProducts.map((x) => {
+          return x
+        })
         this.isLoaded = true
       } catch (e) {
         this.$notify('', e, 'error', 5000)
@@ -110,25 +122,22 @@ export default Vue.extend<D, M, C, P>({
         loader.hide()
       }
     },
-    async search(searchingValue) {
+    search(searchingValue) {
       if (searchingValue === undefined || searchingValue === '') {
         this.healFromSearch = this.heal
         this.setPages()
       } else {
-        try {
-          const result = await drugsClient(this.$axios).getDrugsByName(
-            searchingValue
-          )
-          if (result.length === 0) {
-            this.searchEmpty = true
-          } else {
-            this.healFromSearch = result.filter((x) => x.headerName === 'heal')
-            this.searchEmpty = false
-          }
-          this.setPages()
-        } catch (e) {
-          this.$notify('', e, 'error', 5000)
+        this.page = 1
+        const healFromSearch = this.healthProducts.filter((x) =>
+          x.name.startsWith(searchingValue.toUpperCase())
+        )
+        if (healFromSearch.length) {
+          this.healFromSearch = healFromSearch
+          this.searchEmpty = false
+        } else {
+          this.searchEmpty = true
         }
+        this.setPages()
       }
     },
     setPages() {

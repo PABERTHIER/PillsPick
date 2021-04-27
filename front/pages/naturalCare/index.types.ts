@@ -12,6 +12,7 @@ export interface D {
 }
 
 export interface M {
+  dispatchNaturalCare: () => void
   loadNaturalCare: () => void
   search: (searchingValue: string) => void
   setPages: () => void
@@ -19,6 +20,7 @@ export interface M {
 }
 
 export interface C {
+  naturalCares: IDrugs[]
   displayedNaturalCare: IDrugs[]
   naturalCareData: IDrugs[]
   searchDesc: string

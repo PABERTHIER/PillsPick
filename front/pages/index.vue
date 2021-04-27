@@ -46,13 +46,13 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapActions } from 'vuex'
-import drugStoresClient from '~/api/drugStoresClient'
+import { mapState, mapActions } from 'vuex'
 import DrugStoreContainer from '~/components/DrugStoreContainer.vue'
 import SearchBar from '~/components/SearchBar.vue'
 import { D, M, C, P } from '~/pages/index.types'
 
 export default Vue.extend<D, M, C, P>({
+  name: 'Index',
   components: {
     DrugStoreContainer,
     SearchBar,
@@ -75,6 +75,7 @@ export default Vue.extend<D, M, C, P>({
     }
   },
   computed: {
+    ...mapState('drugStores', { drgStores: 'drugStores' }),
     displayedDrugStores() {
       return this.paginate(this.drugStoresData)
     },
@@ -95,10 +96,22 @@ export default Vue.extend<D, M, C, P>({
     },
   },
   mounted() {
-    this.loadDrugStores()
+    if (this.drgStores && this.drgStores.length) {
+      this.drugStores = this.drgStores.map((x) => {
+        return x
+      })
+      this.isLoaded = true
+    } else {
+      this.loadDrugStores()
+      this.loadDrugs()
+    }
   },
   methods: {
-    ...mapActions('drugStores', ['dispatchSelectDrugStore']),
+    ...mapActions('drugStores', [
+      'dispatchSelectDrugStore',
+      'dispatchDrugStores',
+    ]),
+    ...mapActions('drugs', ['dispatchDrugs']),
     selectDrugStore(data) {
       this.dispatchSelectDrugStore(data)
     },
@@ -108,7 +121,10 @@ export default Vue.extend<D, M, C, P>({
         container: undefined,
       })
       try {
-        this.drugStores = await drugStoresClient(this.$axios).getDrugStores()
+        await this.dispatchDrugStores()
+        this.drugStores = this.drgStores.map((x) => {
+          return x
+        })
         this.isLoaded = true
       } catch (e) {
         this.$notify('', e, 'error', 5000)
@@ -118,28 +134,26 @@ export default Vue.extend<D, M, C, P>({
         loader.hide()
       }
     },
-    async search(searchingValue) {
+    search(searchingValue) {
       if (searchingValue === undefined || searchingValue === '') {
         this.drugStoresFromSearch = this.drugStores
         this.setPages()
       } else {
-        try {
-          const result = await drugStoresClient(
-            this.$axios
-          ).getDrugStoresByZipCode(searchingValue)
-          if (result.length === 0) {
-            this.searchEmpty = true
-          } else {
-            this.drugStoresFromSearch = result.map((x) => {
-              return x
-            })
-            this.searchEmpty = false
-          }
-          this.setPages()
-        } catch (e) {
-          this.$notify('', e, 'error', 5000)
+        this.page = 1
+        const drugStoresFromSearch = this.drgStores.filter((x) =>
+          x.zipCode.startsWith(searchingValue)
+        )
+        if (drugStoresFromSearch.length) {
+          this.drugStoresFromSearch = drugStoresFromSearch
+          this.searchEmpty = false
+        } else {
+          this.searchEmpty = true
         }
+        this.setPages()
       }
+    },
+    loadDrugs() {
+      this.dispatchDrugs()
     },
     setPages() {
       this.pages = []

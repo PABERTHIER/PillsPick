@@ -42,12 +42,13 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import drugsClient from '~/api/drugsClient'
+import { mapState, mapActions } from 'vuex'
 import SearchBar from '~/components/SearchBar.vue'
 import PillContainer from '~/components/PillContainer.vue'
 import { D, M, C, P } from '~/pages/optical/index.types'
 
 export default Vue.extend<D, M, C, P>({
+  name: 'Index',
   components: {
     PillContainer,
     SearchBar,
@@ -66,6 +67,7 @@ export default Vue.extend<D, M, C, P>({
     }
   },
   computed: {
+    ...mapState('drugs', { opticals: 'optical' }),
     displayedOptical() {
       return this.paginate(this.opticalData)
     },
@@ -86,17 +88,27 @@ export default Vue.extend<D, M, C, P>({
     },
   },
   mounted() {
-    this.loadOptical()
+    if (this.opticals && this.opticals.length) {
+      this.optical = this.opticals.map((x) => {
+        return x
+      })
+      this.isLoaded = true
+    } else {
+      this.loadOptical()
+    }
   },
   methods: {
+    ...mapActions('drugs', ['dispatchOptical']),
     async loadOptical() {
       this.isLoading = true
       const loader = this.$loading.show({
         container: undefined,
       })
       try {
-        const result = await drugsClient(this.$axios).getDrugs()
-        this.optical = result.filter((x) => x.headerName === 'optical')
+        await this.dispatchOptical()
+        this.optical = this.opticals.map((x) => {
+          return x
+        })
         this.isLoaded = true
       } catch (e) {
         this.$notify('', e, 'error', 5000)
@@ -106,27 +118,22 @@ export default Vue.extend<D, M, C, P>({
         loader.hide()
       }
     },
-    async search(searchingValue) {
+    search(searchingValue) {
       if (searchingValue === undefined || searchingValue === '') {
         this.opticalFromSearch = this.optical
         this.setPages()
       } else {
-        try {
-          const result = await drugsClient(this.$axios).getDrugsByName(
-            searchingValue
-          )
-          if (result.length === 0) {
-            this.searchEmpty = true
-          } else {
-            this.opticalFromSearch = result.filter(
-              (x) => x.headerName === 'optical'
-            )
-            this.searchEmpty = false
-          }
-          this.setPages()
-        } catch (e) {
-          this.$notify('', e, 'error', 5000)
+        this.page = 1
+        const opticalFromSearch = this.opticals.filter((x) =>
+          x.name.startsWith(searchingValue.toUpperCase())
+        )
+        if (opticalFromSearch.length) {
+          this.opticalFromSearch = opticalFromSearch
+          this.searchEmpty = false
+        } else {
+          this.searchEmpty = true
         }
+        this.setPages()
       }
     },
     setPages() {

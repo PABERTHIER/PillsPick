@@ -42,12 +42,13 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import drugsClient from '~/api/drugsClient'
+import { mapState, mapActions } from 'vuex'
 import SearchBar from '~/components/SearchBar.vue'
 import PillContainer from '~/components/PillContainer.vue'
 import { D, M, C, P } from '~/pages/advices/index.types'
 
 export default Vue.extend<D, M, C, P>({
+  name: 'Index',
   components: {
     PillContainer,
     SearchBar,
@@ -66,6 +67,7 @@ export default Vue.extend<D, M, C, P>({
     }
   },
   computed: {
+    ...mapState('drugs', { prescriptions: 'advices' }),
     displayedAdvices() {
       return this.paginate(this.advicesData)
     },
@@ -86,17 +88,27 @@ export default Vue.extend<D, M, C, P>({
     },
   },
   mounted() {
-    this.loadAdvices()
+    if (this.prescriptions && this.prescriptions.length) {
+      this.advices = this.prescriptions.map((x) => {
+        return x
+      })
+      this.isLoaded = true
+    } else {
+      this.loadAdvices()
+    }
   },
   methods: {
+    ...mapActions('drugs', ['dispatchAdvices']),
     async loadAdvices() {
       this.isLoading = true
       const loader = this.$loading.show({
         container: undefined,
       })
       try {
-        const result = await drugsClient(this.$axios).getDrugs()
-        this.advices = result.filter((x) => x.headerName === 'prescription')
+        await this.dispatchAdvices()
+        this.advices = this.prescriptions.map((x) => {
+          return x
+        })
         this.isLoaded = true
       } catch (e) {
         this.$notify('', e, 'error', 5000)
@@ -106,27 +118,22 @@ export default Vue.extend<D, M, C, P>({
         loader.hide()
       }
     },
-    async search(searchingValue) {
+    search(searchingValue) {
       if (searchingValue === undefined || searchingValue === '') {
         this.advicesFromSearch = this.advices
         this.setPages()
       } else {
-        try {
-          const result = await drugsClient(this.$axios).getDrugsByName(
-            searchingValue
-          )
-          if (result.length === 0) {
-            this.searchEmpty = true
-          } else {
-            this.advicesFromSearch = result.filter(
-              (x) => x.headerName === 'prescription'
-            )
-            this.searchEmpty = false
-          }
-          this.setPages()
-        } catch (e) {
-          this.$notify('', e, 'error', 5000)
+        this.page = 1
+        const advicesFromSearch = this.prescriptions.filter((x) =>
+          x.name.startsWith(searchingValue.toUpperCase())
+        )
+        if (advicesFromSearch.length) {
+          this.advicesFromSearch = advicesFromSearch
+          this.searchEmpty = false
+        } else {
+          this.searchEmpty = true
         }
+        this.setPages()
       }
     },
     setPages() {

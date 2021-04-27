@@ -4,8 +4,11 @@
       <div class="toto">
         <icon :name="pictureName" :original="true" class="picture" />
       </div>
-      <div class="icon-add">
+      <div v-if="canAdd" class="icon-add" @click="addToCart()">
         <icon name="add" />
+      </div>
+      <div v-if="canRemove" class="icon-remove" @click="removeToCart()">
+        <icon name="close" />
       </div>
     </div>
     <div class="icon-info">
@@ -27,6 +30,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { mapState, mapActions } from 'vuex'
 import { D, M, C, P } from '~/components/PillContainer.types'
 
 export default Vue.extend<D, M, C, P>({
@@ -39,12 +43,55 @@ export default Vue.extend<D, M, C, P>({
       type: String,
       required: true,
     },
+    canAdd: {
+      type: Boolean,
+      required: false,
+      default: true,
+    },
+    canRemove: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
   },
   data() {
     return {}
   },
-  computed: {},
-  methods: {},
+  computed: {
+    ...mapState('drugStores', ['drugStore']),
+    ...mapState('user', ['isConnected']),
+  },
+  methods: {
+    ...mapActions('drugs', ['addDrugToCart', 'removeDrugToCart']),
+    addToCart() {
+      try {
+        if (this.isConnected && this.drugStore && this.drugStore.name) {
+          this.addDrugToCart(this.drug)
+          const infoAdded = 'miscellaneous.drug_added_cart'
+          const drugName = this.drug.name
+          const info = this.$t(infoAdded, {
+            drug: drugName,
+          }) as string
+          this.$notify('', info, 'info', 2000)
+        } else if (this.isConnected && !this.drugStore) {
+          const drugStoreTitle = this.$t(
+            'miscellaneous.drugstore_required'
+          ) as string
+          this.$notify('', drugStoreTitle, 'error', 5000)
+        } else {
+          const connectionTitle = this.$t(
+            'miscellaneous.connection_required'
+          ) as string
+          this.$notify('', connectionTitle, 'error', 5000)
+        }
+      } catch (e) {
+        this.$notify('', e, 'error', 5000)
+      }
+    },
+    removeToCart() {
+      this.removeDrugToCart(this.drug.id)
+    },
+  },
 })
 </script>
 
@@ -66,7 +113,8 @@ export default Vue.extend<D, M, C, P>({
         text-align: center;
       }
     }
-    .icon-add {
+    .icon-add,
+    .icon-remove {
       text-align: right;
       width: 100%;
     }

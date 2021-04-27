@@ -17,6 +17,8 @@ export interface IDrugs {
   owner: string
   isWatched: boolean
   headerName: string
+  price?: number
+  quantity?: number
 }
 
 export interface IDrugStores {

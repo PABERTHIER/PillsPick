@@ -12,6 +12,7 @@ export interface D {
 }
 
 export interface M {
+  dispatchHealthProducts: () => void
   loadHeal: () => void
   search: (searchingValue: string) => void
   setPages: () => void
@@ -19,6 +20,7 @@ export interface M {
 }
 
 export interface C {
+  healthProducts: IDrugs[]
   displayedHeal: IDrugs[]
   healData: IDrugs[]
   searchDesc: string

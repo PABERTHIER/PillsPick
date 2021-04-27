@@ -1,15 +1,16 @@
 <template>
   <div class="page-container">
     <div class="orders">
-      <OrderContainer
-        v-for="order in orders"
-        :key="order.id"
-        class="order"
-        :data="order"
-        :user-type="userType"
-        @validateOrder="validateOrder"
-        @cancelOrder="cancelOrder"
-      />
+      <div v-for="order in orders" :key="order.id" class="order">
+        <OrderContainer
+          v-if="order.orderData.length"
+          :data="order"
+          :user-type="userType"
+          class="ord"
+          @validateOrder="validateOrder"
+          @cancelOrder="cancelOrder"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -33,7 +34,7 @@ export default Vue.extend<D, M, C, P>({
     }
   },
   computed: {
-    ...mapState('user', ['user']),
+    ...mapState('user', ['user', 'isConnected']),
     userId() {
       return this.$route.params.id
     },
@@ -45,7 +46,11 @@ export default Vue.extend<D, M, C, P>({
     },
   },
   mounted() {
-    this.loadOrders()
+    if (this.isConnected) {
+      this.loadOrders()
+    } else {
+      this.$router.replace('/')
+    }
   },
   methods: {
     async loadOrders() {
@@ -108,9 +113,31 @@ export default Vue.extend<D, M, C, P>({
     display: flex;
     flex-wrap: wrap;
     width: 100%;
-    .order {
-      max-width: 500px;
-      margin-right: 40px;
+  }
+}
+@include window-up(md) {
+  .page-container {
+    .orders {
+      .ord {
+        width: 500px;
+        margin-right: 40px;
+      }
+    }
+  }
+}
+@include window-down(xl) {
+  .page-container {
+    .orders {
+      justify-content: center;
+    }
+  }
+}
+@include window-down(md) {
+  .page-container {
+    .orders {
+      .ord {
+        max-width: 300px;
+      }
     }
   }
 }

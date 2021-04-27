@@ -37,7 +37,7 @@ export default Vue.extend<D, M, C, P>({
       required: true,
     },
     type: {
-      type: Object,
+      type: [Object, String],
       required: true,
     },
   },

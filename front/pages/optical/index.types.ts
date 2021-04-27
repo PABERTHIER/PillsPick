@@ -12,6 +12,7 @@ export interface D {
 }
 
 export interface M {
+  dispatchOptical: () => void
   loadOptical: () => void
   search: (searchingValue: string) => void
   setPages: () => void
@@ -19,6 +20,7 @@ export interface M {
 }
 
 export interface C {
+  opticals: IDrugs[]
   displayedOptical: IDrugs[]
   opticalData: IDrugs[]
   searchDesc: string

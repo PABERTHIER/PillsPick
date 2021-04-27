@@ -7,9 +7,23 @@
       :class="status"
       @click="togglePopup"
     />
+    <div v-if="cart && cart.length" class="items-number">
+      {{ cart.length }}
+    </div>
     <Popup v-if="showActions" class="popup">
       <div class="content">
         <HeyYou v-if="user" :user="user" class="hey" />
+        <nuxt-link
+          v-if="userId !== 0"
+          :to="`/cart/${userId}`"
+          class="cart link"
+          @click.native="closePopup"
+        >
+          <div class="icon">
+            <icon name="cart" />
+          </div>
+          <div v-t="'miscellaneous.cart'" />
+        </nuxt-link>
         <nuxt-link
           v-if="userId !== 0"
           :to="`/orders/${userId}`"
@@ -40,6 +54,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { mapState } from 'vuex'
 import HeyYou from '~/components/HeyYou.vue'
 import Popup from '~/components/Popup.vue'
 import { D, M, C, P } from '~/components/Avatar.types'
@@ -90,6 +105,7 @@ export default Vue.extend<D, M, C, P>({
     }
   },
   computed: {
+    ...mapState('drugs', ['cart']),
     status() {
       if (this.isConnected) {
         return 'connected'
@@ -118,6 +134,7 @@ export default Vue.extend<D, M, C, P>({
 
 <style lang="scss" scoped>
 .avatar-container {
+  position: relative;
   .avatar-icon {
     border-radius: 50%;
   }
@@ -132,6 +149,20 @@ export default Vue.extend<D, M, C, P>({
     &.svg-icon {
       fill-opacity: 1;
     }
+  }
+  .items-number {
+    position: absolute;
+    top: 43px;
+    right: -5px;
+    background-color: $white;
+    height: 25px;
+    width: 25px;
+    border-radius: 50%;
+    color: $blue;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 11px;
   }
   .popup {
     right: 0px;

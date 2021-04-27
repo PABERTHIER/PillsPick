@@ -1,6 +1,6 @@
 import { NuxtAxiosInstance } from '@nuxtjs/axios'
 import { CancelToken } from 'axios'
-import { IOrders } from './api.type'
+import { IDrugs, IOrders } from './api.type'
 import httpClient from '~/api/httpClient'
 
 export default ($axios: NuxtAxiosInstance) => ({
@@ -43,5 +43,12 @@ export default ($axios: NuxtAxiosInstance) => ({
   cancelOrder(id: number, cancelToken?: CancelToken) {
     const url = process.env.baseApi + 'cancelOrder/' + id
     return httpClient($axios).post<void>(url, cancelToken)
+  },
+  postOrder(
+    order: { idUser: number; idDrugStore: number; drugIds: number[] },
+    cancelToken?: CancelToken
+  ) {
+    const url = process.env.baseApi + 'postOrder'
+    return httpClient($axios).post<void>(url, order, cancelToken)
   },
 })

@@ -8,6 +8,9 @@ export const mutations = {
   deleteDrugStore(state: IDrugStoreState) {
     state.drugStore = undefined
   },
+  setDrugStores(state: IDrugStoreState, payload: IDrugStores[]) {
+    state.drugStores = payload
+  },
 }
 
 export default mutations
